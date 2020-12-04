@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<robot name="scanner" xmlns:xacro="http://www.ros.org/wiki/xacro">
+  <link name="scan_origin"/>
+  <xacro:include filename="$(find robostats_proj)/urdf/welding_sensor.xacro"/>
+
+  <welding_sensor parent="scan_origin"/>
+</robot>

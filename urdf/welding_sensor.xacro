@@ -1,0 +1,105 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="welding_sensor">
+
+  <xacro:macro name="welding_sensor" params="parent">
+
+    <!-- ======================= Links ======================= -->
+    <link name="Weldingsensor">
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://robostats_proj/meshes/weldingsensor.dae" />
+        </geometry>
+      </visual>
+      <collision>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://robostats_proj/meshes/weldingsensor.dae" />
+        </geometry>
+      </collision>
+      <inertial>
+        <origin xyz="0.0 -0.0688 -0.0428" rpy="0.0 0.0 0.0"/>
+        <mass value="0.8" />
+        <inertia ixx="0.0029" ixy="-0.0000" ixz="-0.0000"
+                 iyy="0.0009" iyz="0.0001"
+                 izz="0.0030"/>
+      </inertial>
+    </link>
+
+    <link name="laser_beam">
+      <visual>
+        <origin xyz="0 -0.013 0" rpy="-1.5708 0 0"/>
+        <geometry>
+          <cylinder radius="0.01" length="0.01"/>
+        </geometry>
+      </visual>
+      <collision>
+        <origin xyz="0 -0.013 0" rpy="-1.5708 0 0"/>
+        <geometry>
+          <cylinder radius="0.01" length="0.01"/>
+        </geometry>
+      </collision>
+      <inertial>
+        <mass value="0.01" />
+        <inertia ixx="3e-7" ixy="0" ixz="0"
+                 iyy="3e-7" iyz="0"
+                 izz="5e-7"/>
+      </inertial>
+    </link>
+
+    <!-- ======================= Joints ====================== -->
+    <joint name="weldingsensor" type="fixed">
+      <parent link="${parent}"/>
+      <child  link="Weldingsensor"/>
+      <origin xyz="-0.013 0.065 0.119" rpy="1.5708 0 0"/>
+    </joint>
+
+    <joint name="laser_emitter" type="fixed">
+      <origin xyz="0 0 0" rpy="1.5708 0 0"/>
+      <parent link="Weldingsensor"/>
+      <child link="laser_beam"/>
+    </joint>
+
+    <!-- ======================= Gazebo ====================== -->
+    <!-- hokuyo| gazebo code-->
+    <gazebo reference="laser_beam">
+      <sensor type="ray" name="head_hokuyo_sensor">
+        <!-- The pose will not be passed to Gazebo during urdf to sdf conversion -->
+        <!-- <pose>0 0 1 1.5708 0 0</pose> -->
+        <visualize>true</visualize>
+        <update_rate>40</update_rate>
+        <ray>
+          <scan>
+            <!-- Using vertical with many laser lines causes memory leak -->
+            <horizontal>
+              <samples>640</samples>
+              <resolution>1</resolution>
+              <min_angle>1.3963</min_angle>
+              <max_angle>1.7453</max_angle>
+            </horizontal>
+          </scan>
+          <range>
+            <min>0.3</min>
+            <max>.6</max>
+            <resolution>0.01</resolution>
+          </range>
+          <noise>
+            <type>gaussian</type>
+            <!-- Noise parameters based on published spec for Hokuyo laser
+                achieving "+-30mm" accuracy at range < 10m.  A mean of 0.0m and
+                stddev of 0.01m will put 99.7% of samples within 0.03m of the true
+                reading. -->
+            <mean>0.0</mean>
+            <stddev>0.00</stddev>
+          </noise>
+        </ray>
+        <plugin name="gazebo_ros_head_hokuyo_controller" filename="libgazebo_ros_laser.so">
+          <topicName>/laser_scan</topicName>
+          <frameName>laser_beam</frameName>
+        </plugin>
+      </sensor>
+    </gazebo>
+
+  </xacro:macro>
+
+</robot>
