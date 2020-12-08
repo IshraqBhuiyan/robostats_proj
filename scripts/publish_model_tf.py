@@ -17,7 +17,7 @@ def handle_link_states(msg):
     if(name=="scanner"):
       pose_idx = i
   if(pose_idx==None):
-    rospy.logerr("Didn't find transform")
+    #rospy.logerr("Didn't find transform")
     return
   pose = msg.pose[pose_idx]
   translation = (pose.position.x, pose.position.y, pose.position.z)

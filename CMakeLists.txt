@@ -11,15 +11,37 @@ find_package(catkin REQUIRED COMPONENTS
   roscpp
   rospy
   gazebo_ros
+  pcl_ros
+  eigen_conversions
+  pcl_conversions
+  message_generation
+  geometry_msgs
+  sensor_msgs
+  std_msgs
+  tf_conversions
+  laser_geometry
 )
 
 find_package(gazebo REQUIRED)
 find_package(Eigen3 REQUIRED)
+find_package(PCL 1.2 REQUIRED)
 
 ## System dependencies are found with CMake's conventions
 # find_package(Boost REQUIRED COMPONENTS system)
 
+add_service_files(
+  FILES
+  get_map.srv
+  get_camera_transform.srv
+)
 
+generate_messages(
+  DEPENDENCIES
+  std_msgs
+  geometry_msgs
+  sensor_msgs
+
+)
 ## Uncomment this if the package has a setup.py. This macro ensures
 ## modules and global scripts declared therein get installed
 ## See http://ros.org/doc/api/catkin/html/user_guide/setup_dot_py.html
@@ -119,7 +141,21 @@ catkin_package(
 ## Specify additional locations of header files
 ## Your package locations should be listed before other locations
 link_directories(${GAZEBO_LIBRARY_DIRS})
-include_directories(${Boost_INCLUDE_DIR} ${catkin_INCLUDE_DIRS} ${GAZEBO_INCLUDE_DIRS})
+include_directories(
+  include
+  ${Boost_INCLUDE_DIR} 
+  ${catkin_INCLUDE_DIRS} 
+  ${GAZEBO_INCLUDE_DIRS}
+  ${PCL_INCLUDE_DIRS}
+  ${Eigen_INCLUDE_DIRS}
+  ${laser_geometry_INCLUDE_DIRS})
+
+add_executable(pointcloud_utils src/pointcloud_utils.cpp)
+target_link_libraries(pointcloud_utils 
+  ${catkin_LIBRARIES} 
+  ${PCL_LIBRARIES} 
+  ${Eigen_LIBRARIES} 
+  ${laser_geometry_LIBRARIES})
 
 ## Declare a C++ library
 # add_library(${PROJECT_NAME}
@@ -206,5 +242,5 @@ include_directories(${Boost_INCLUDE_DIR} ${catkin_INCLUDE_DIRS} ${GAZEBO_INCLUDE
 ## Add folders to be run by python nosetests
 # catkin_add_nosetests(test)
 
-add_library(model_action_plugin src/model_actions.cpp)
-target_link_libraries(model_action_plugin ${catkin_LIBRARIES} ${GAZEBO_LIBRARIES})
+#add_library(model_action_plugin src/model_actions.cpp)
+#target_link_libraries(model_action_plugin ${catkin_LIBRARIES} ${GAZEBO_LIBRARIES})

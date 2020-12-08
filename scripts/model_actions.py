@@ -18,7 +18,7 @@ def handle_link_states(msg):
     if(name=="scanner"):
       pose_idx = i
   if(pose_idx==None):
-    rospy.logerr("Didn't find transform")
+    #rospy.logerr("Didn't find transform")
     return
   #embed()
   global current_state

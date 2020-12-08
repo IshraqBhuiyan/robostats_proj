@@ -1,7 +1,8 @@
 <launch>
   <arg name="x" default="0"/>
-  <arg name="y" default="0.3"/>
-  <arg name="z" default="0.5"/>
+  <arg name="y" default="0.4"/>
+  <arg name="z" default="0.8"/>
+  <arg name="gui" default="true"/>
 
   <param name="sensor_description" command="xacro '$(find robostats_proj)/urdf/scanner.xacro'"/>
 
@@ -9,9 +10,11 @@
   <include file="$(find gazebo_ros)/launch/empty_world.launch">
     <arg name="world_name" value="$(find robostats_proj)/world/proj.world"/>
     <arg name="verbose" value="true"/>
+    <arg name="gui" value="$(arg gui)"/>
+    <arg name="use_sim_time" value="true"/>
   </include>
 
-  <arg name="gui" default="true"/>
+  
   <param name="use_gui" value="$(arg gui)"/>
 
   <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher">
@@ -28,7 +31,7 @@
     args="-param sensor_description -urdf -model scanner -x $(arg x) -y $(arg y) -z $(arg z)"/>
   
   <node name="spawn_sdf" pkg="gazebo_ros" type="spawn_model"
-    args="-file $(find robostats_proj)/gazebo_models/stanford_bunny/model.sdf -sdf -x 0 -y 0 -z 0.5 -model bunny"/>
+    args="-file $(find robostats_proj)/gazebo_models/stanford_bunny/model.sdf -sdf -x 0 -y 0 -z 0.7 -model bunny"/>
   
   <node name="publish_model_tf" pkg="robostats_proj" type="publish_model_tf.py"/>
 </launch>

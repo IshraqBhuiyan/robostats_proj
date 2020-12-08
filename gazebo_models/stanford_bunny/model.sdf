@@ -3,11 +3,14 @@
   <model name="stanford_bunny">
 	<static>true</static>
 	<link name='stanford_bunny'>
-            <pose>0 0 0.00 1.571 0 0</pose>
+            <pose>0 0 0.00 0 0 0</pose>
 
             <collision name='collision'>
               <geometry>
-                <mesh><uri>model://stanford_bunny/mesh/bun_zipper.stl</uri></mesh>
+                <mesh>
+                  <uri>model://stanford_bunny/mesh/Stanford_Bunny.stl</uri>
+                  <scale>0.002 0.002 0.002</scale>
+                </mesh>
               </geometry>
 		          <surface>
                 <friction>
@@ -32,7 +35,10 @@
 
             <visual name='visual'>
               <geometry>
-                <mesh><uri>model://stanford_bunny/mesh/bun_zipper.stl</uri></mesh>
+                <mesh>
+                  <uri>model://stanford_bunny/mesh/Stanford_Bunny.stl</uri>
+                  <scale>0.002 0.002 0.002</scale>
+                </mesh>
               </geometry>
             </visual>
           </link>
