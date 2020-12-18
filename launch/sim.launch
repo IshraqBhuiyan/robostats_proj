@@ -31,7 +31,8 @@
     args="-param sensor_description -urdf -model scanner -x $(arg x) -y $(arg y) -z $(arg z)"/>
   
   <node name="spawn_sdf" pkg="gazebo_ros" type="spawn_model"
-    args="-file $(find robostats_proj)/gazebo_models/stanford_bunny/model.sdf -sdf -x 0 -y 0 -z 0.7 -model bunny"/>
+    args="-file $(find robostats_proj)/gazebo_models/happy_buddha/model.sdf -sdf -x 0 -y 0 -z 0.8 -model bunny"/>
+    <!--0.7 z for bunny-->
   
   <node name="publish_model_tf" pkg="robostats_proj" type="publish_model_tf.py"/>
 </launch>

@@ -29,7 +29,7 @@ void scanCallback (const sensor_msgs::LaserScan::ConstPtr& scan_in)
   projector_.projectLaser(*scan_in, cloud);
   tf::StampedTransform to_world;
 
-  pcl::PCLPointCloud2 *temp_cloud = new pcl::PCLPointCloud2; //Memory leak
+  pcl::PCLPointCloud2::Ptr temp_cloud(new pcl::PCLPointCloud2); //Memory leak
   pcl::PointCloud<pcl::PointXYZ>::Ptr cloudtemp(new pcl::PointCloud<pcl::PointXYZ>);
 
   try{
@@ -53,11 +53,11 @@ void scanCallback (const sensor_msgs::LaserScan::ConstPtr& scan_in)
   grid.filter(*cloud_map);
 
   // Do something with cloud.
-  delete temp_cloud;
+  //delete temp_cloud;
 }
 
 bool reset_cb(std_srvs::Empty::Request& req, std_srvs::Empty::Response& resp){
-  cloud_map->clear();
+  cloud_map = boost::make_shared<pcl::PointCloud<pcl::PointXYZ>>();
   return true;
 }
 
